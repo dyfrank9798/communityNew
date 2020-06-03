@@ -31,7 +31,6 @@ public class GithubProvider {
                     access_token =items[i].split("=")[1];
                 }
             }
-            System.out.println(result);
             return access_token;
         } catch (IOException e) {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import com.majiang.frank.community.dto.AccessTokenDto;
 import com.majiang.frank.community.dto.GithubUerDto;
 import com.majiang.frank.community.util.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class OAuthController {
     @Autowired
     private GithubProvider githubProvider;
+
+    @Value("${github.client.id}")
+    private String clientId;
+
+    @Value("${github.redirect.uri}")
+    private String redirectUri;
+
+    @Value("${github.client.secret}")
+    private String clientSecret;
+
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state
@@ -19,9 +31,9 @@ public class OAuthController {
         AccessTokenDto accessTokenDto = new AccessTokenDto();
         accessTokenDto.setCode(code);
         accessTokenDto.setState(state);
-        accessTokenDto.setClient_id("Iv1.63cf4b5a97d23b04");
-        accessTokenDto.setRedirect_uri("http://localhost:8887/callback");
-        accessTokenDto.setClient_secret("531dfbac55b125c7adb8a8a8ed92b79bc301d1f6");
+        accessTokenDto.setClient_id(clientId);
+        accessTokenDto.setRedirect_uri(redirectUri);
+        accessTokenDto.setClient_secret(clientSecret);
 
         String access_token = githubProvider.getAccessToken(accessTokenDto);
         GithubUerDto githubUerDto = githubProvider.getUser(access_token);
